@@ -37,6 +37,10 @@ def main(event, context):
 
     response = {
         "statusCode": 200,
+        "headers": {
+            'Access-Control-Allow-Origin': 'http://localhost:3000',
+            'Access-Control-Allow-Credentials': 'true'
+        },
         "body": json.dumps(body)
     }
 
