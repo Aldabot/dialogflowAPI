@@ -35,7 +35,7 @@ def main(event, context):
     response = {
         "statusCode": 200,
         "headers": {
-            'Access-Control-Allow-Origin': 'http://localhost:3000',
+            'Access-Control-Allow-Origin': 'http://alda.bot.s3-website-eu-west-1.amazonaws.com', #'http://localhost:3000',
             'Access-Control-Allow-Credentials': 'true'
         },
         "body": dialogflow_response

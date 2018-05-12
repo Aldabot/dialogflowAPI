@@ -46,7 +46,7 @@ functions:
           path: dialogflow/detectIntent
           method: post 
           cors:
-            origin: 'http://localhost:3000'
+            origin: 'http://alda.bot.s3-website-eu-west-1.amazonaws.com' #'http://localhost:3000'
             headers:
               - Content-Type
               - X-Amz-Date

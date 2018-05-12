@@ -17,6 +17,7 @@ var/
 *.egg
 node_modules
 __pycache__
+googleApplicationCredentials.json
 
 # Serverless directories
 .serverless
