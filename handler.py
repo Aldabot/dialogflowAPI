@@ -1,5 +1,6 @@
 import json
 import dialogflow
+from google.protobuf.json_format import MessageToJson
 
 def detect_intent_text(project_id, session_id, text, language_code):
     """Returns the result of detected intents with texts as inputs
@@ -16,24 +17,20 @@ def detect_intent_text(project_id, session_id, text, language_code):
 
     response = session_client.detect_intent(session=session, query_input=query_input)
 
-    print('=' * 20)
-    print('Query text: {}'.format(response.query_result.query_text))
-    print('Detected intent: {} (confidence: {})\n'.format(
-        response.query_result.intent.display_name,
-        response.query_result.intent_detection_confidence))
-    print('Fulfillment text: {}\n'.format(
-        response.query_result.fulfillment_text))
-    return response.query_result.fulfillment_text
+    return MessageToJson(response.query_result)
 
-project_id = 'newagent-91a6d'
+project_id = 'alda-bot-5d8a0'
 session_id = '1'
 language_code = 'es'
 def main(event, context):
-    fulfillment_text = detect_intent_text(project_id, session_id, 'hola', language_code)
-    body = {
-        "message": fulfillment_text,
-        "input": event
-    }
+    print(event)
+    print(type(event['body']))
+    # body = event['body'] # sls invoke local...
+    body = json.loads(event['body'])
+
+    print(body)
+    message = body['message']
+    dialogflow_response = detect_intent_text(project_id, session_id, message, language_code)
 
     response = {
         "statusCode": 200,
@@ -41,7 +38,7 @@ def main(event, context):
             'Access-Control-Allow-Origin': 'http://localhost:3000',
             'Access-Control-Allow-Credentials': 'true'
         },
-        "body": json.dumps(body)
+        "body": dialogflow_response
     }
 
     return response
