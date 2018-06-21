@@ -24,7 +24,7 @@ session_id = '1'
 language_code = 'es'
 def main(event, context):
     print(event)
-    print(type(event['body']))
+    # print(type(event['body']))
     # body = event['body'] # sls invoke local...
     body = json.loads(event['body'])
 
@@ -32,13 +32,23 @@ def main(event, context):
     message = body['message']
     dialogflow_response = detect_intent_text(project_id, session_id, message, language_code)
 
+    allowedOrigins = ['http://localhost:3000', 'https://alda.bot', 'https://www.alda.bot']
+    origin = event['headers']['origin']
+    if origin in allowedOrigins:
+        response = {
+            "statusCode": 200,
+            "headers": {
+                'Access-Control-Allow-Origin': origin,
+                'Access-Control-Allow-Credentials': 'true',
+                'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST',
+            },
+            "body": dialogflow_response
+        }
+        return response
+
     response = {
-        "statusCode": 200,
-        "headers": {
-            'Access-Control-Allow-Origin': 'http://alda.bot.s3-website-eu-west-1.amazonaws.com', #'http://localhost:3000',
-            'Access-Control-Allow-Credentials': 'true'
-        },
-        "body": dialogflow_response
+        "statusCode": 403,
     }
 
     return response
